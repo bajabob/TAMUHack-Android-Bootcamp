@@ -20,25 +20,43 @@
 
 package com.tamuhack.bootcamp;
 
-import android.app.Application;
+import com.parse.ParseObject;
 
-import com.parse.Parse;
+/**
+ * Created by bob on 9/13/15.
+ */
+public class Message {
+
+    private String mUser;
+    private String mMessage;
+    private String mUserProfileUrl;
+    private long mDate;
 
 
-public class BootcampApplication extends Application{
+    public Message(ParseObject po){
 
-    public static final String API_PARSE_APP_ID = "hWhDHFDUFftfpQap9W8Zu6FypIbgQTtLdTsG32xS";
-    public static final String API_PARSE_APP_KEY = "o8f4clOIdhYyKeYCPPXUsqVHk9J3mYeB8WUK7DbW";
+        mMessage = po.getString("message");
+        mDate = po.getCreatedAt().getTime();
 
-    @Override
-    public void onCreate() {
-        super.onCreate();
+        ParseObject user = po.getParseObject("poster");
 
-        Parse.enableLocalDatastore(this);
-
-        Parse.initialize(this, API_PARSE_APP_ID, API_PARSE_APP_KEY);
-
+        mUser = user.getString("name");
+        mUserProfileUrl = user.getString("profilePictureUrl");
     }
 
+    public long getDate(){
+        return mDate;
+    }
 
+    public String getUsername(){
+        return mUser;
+    }
+
+    public String getMessage(){
+        return mMessage;
+    }
+
+    public String getUserProfilePictureUrl(){
+        return mUserProfileUrl;
+    }
 }
