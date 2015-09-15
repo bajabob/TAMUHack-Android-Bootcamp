@@ -1,5 +1,5 @@
 <resources>
     <string name="app_name">Bootcamp</string>
-
+    <string name="messages_enter_text_here">Enter Message Here</string>
 
 </resources>

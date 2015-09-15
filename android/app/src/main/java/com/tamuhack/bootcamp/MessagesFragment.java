@@ -29,22 +29,27 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageButton;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.SaveCallback;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class MessagesFragment extends Fragment {
+public class MessagesFragment extends Fragment implements View.OnClickListener{
 
-    private static final String LOG = "MessagesFragment";
+    private static final String TAG = "MessagesFragment";
 
     private RecyclerView mRecyclerView;
     private MessagesAdapter mAdapter;
+    private ImageButton mSend;
+    private EditText mMessage;
 
 
     public static MessagesFragment newInstance() {
@@ -65,11 +70,14 @@ public class MessagesFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_messages, container, false);
 
         mRecyclerView = (RecyclerView)view.findViewById(R.id.messages);
-
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-
         mAdapter = new MessagesAdapter(getContext());
         mRecyclerView.setAdapter(mAdapter);
+
+        mSend = (ImageButton) view.findViewById(R.id.send);
+        mSend.setOnClickListener(this);
+
+        mMessage = (EditText) view.findViewById(R.id.message);
 
         return view;
     }
@@ -86,7 +94,7 @@ public class MessagesFragment extends Fragment {
                 if (e == null) {
 
                     // found some messages, print how many
-                    Log.d(LOG, "Retrieved " + parseObjectList.size() + " messages");
+                    Log.d(TAG, "Retrieved " + parseObjectList.size() + " messages");
 
                     // create message objects so that we can use them later
                     //  to make the visible list in the adapter
@@ -96,13 +104,41 @@ public class MessagesFragment extends Fragment {
                     }
 
                     mAdapter.setMessages(messages);
+                    mRecyclerView.scrollToPosition(messages.size()-1);
 
                 } else {
-                    Log.d(LOG, "Error: " + e.getMessage());
+                    Log.d(TAG, "Error: " + e.getMessage());
                 }
             }
         });
 
     }
 
+    @Override
+    public void onClick(View v) {
+
+        // send button has been clicked
+        if(v.getId() == R.id.send){
+
+            String message = mMessage.getText().toString();
+
+            ParseObject po = new ParseObject("Messages");
+            po.put("message", message);
+            po.put("poster", ParseObject.createWithoutData("User", "D0QU3Il9Zh"));
+            po.saveInBackground(new SaveCallback() {
+                @Override
+                public void done(ParseException e) {
+                    if (e == null) {
+                        // clear the message
+                        mMessage.setText("");
+                        fetchMessages();
+                    } else {
+                        Log.e(TAG, "Could not send message: " + e.getLocalizedMessage());
+                    }
+                }
+            });
+
+
+        }
+    }
 }
