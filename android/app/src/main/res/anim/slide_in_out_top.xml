@@ -19,11 +19,16 @@
   ~ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
   -->
 
-<resources>
-  <color name="maroon">#500000</color>
-  <color name="grey">#999999</color>
-  <color name="lightGrey">#eeeeee</color>
-  <color name="warningMessage">#f65d5d</color>
-  <color name="warningBackground">#ffffff</color>
+<set xmlns:android="http://schemas.android.com/apk/res/android">
+    <translate
+        android:duration="200"
+        android:fromYDelta="-100%"
+        android:toYDelta="0%" />
 
-</resources>
+  <translate
+      android:startOffset="4000"
+      android:fillAfter="true"
+      android:duration="200"
+      android:fromYDelta="0%"
+      android:toYDelta="-100%" />
+</set>

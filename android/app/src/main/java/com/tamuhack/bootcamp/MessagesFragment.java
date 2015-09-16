@@ -21,16 +21,24 @@
 package com.tamuhack.bootcamp;
 
 
+import android.content.Context;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -50,7 +58,8 @@ public class MessagesFragment extends Fragment implements View.OnClickListener{
     private MessagesAdapter mAdapter;
     private ImageButton mSend;
     private EditText mMessage;
-
+    private ProgressBar mSpinner;
+    private TextView mError;
 
     public static MessagesFragment newInstance() {
         MessagesFragment fragment = new MessagesFragment();
@@ -60,7 +69,14 @@ public class MessagesFragment extends Fragment implements View.OnClickListener{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.fetchMessages();
+
+        // check for an internet connection
+        ConnectivityManager cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        if((cm.getActiveNetworkInfo() != null)) {
+            this.fetchMessages();
+        }else{
+            showError();
+        }
     }
 
     @Override
@@ -79,6 +95,10 @@ public class MessagesFragment extends Fragment implements View.OnClickListener{
 
         mMessage = (EditText) view.findViewById(R.id.message);
 
+        mSpinner = (ProgressBar) view.findViewById(R.id.spinner);
+
+        mError = (TextView) view.findViewById(R.id.error);
+        
         return view;
     }
 
@@ -103,17 +123,56 @@ public class MessagesFragment extends Fragment implements View.OnClickListener{
                         messages.add(new Message(po));
                     }
 
+                    // did we get any new messages? if so we should scroll to the bottom
+                    boolean shouldScroll = (messages.size() != mAdapter.getItemCount());
                     mAdapter.setMessages(messages);
-                    mRecyclerView.scrollToPosition(messages.size()-1);
+
+                    if(shouldScroll) {
+                        mRecyclerView.scrollToPosition(messages.size() - 1);
+                    }
+
+                    // fetch messages again in a couple seconds
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable(){
+                        @Override
+                        public void run(){
+                            fetchMessages();
+                        }
+                    }, 5000);
 
                 } else {
                     Log.d(TAG, "Error: " + e.getMessage());
+                    showError();
                 }
             }
         });
 
     }
 
+    public void showError(){
+        Animation slideDown = AnimationUtils.loadAnimation(getContext(), R.anim.slide_in_out_top);
+        slideDown.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                // need to hide the view when the animation is complete
+                mError.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        mError.startAnimation(slideDown);
+        mError.setVisibility(View.VISIBLE);
+    }
+    
+    
     @Override
     public void onClick(View v) {
 
@@ -122,23 +181,31 @@ public class MessagesFragment extends Fragment implements View.OnClickListener{
 
             String message = mMessage.getText().toString();
 
-            ParseObject po = new ParseObject("Messages");
-            po.put("message", message);
-            po.put("poster", ParseObject.createWithoutData("User", "D0QU3Il9Zh"));
-            po.saveInBackground(new SaveCallback() {
-                @Override
-                public void done(ParseException e) {
-                    if (e == null) {
-                        // clear the message
-                        mMessage.setText("");
-                        fetchMessages();
-                    } else {
-                        Log.e(TAG, "Could not send message: " + e.getLocalizedMessage());
+            if( !TextUtils.isEmpty(message)) {
+
+                mSpinner.setVisibility(View.VISIBLE);
+                mSend.setVisibility(View.GONE);
+
+                ParseObject po = new ParseObject("Messages");
+                po.put("message", message);
+                po.put("poster", ParseObject.createWithoutData("User", "D0QU3Il9Zh"));
+                po.saveInBackground(new SaveCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        if (e == null) {
+                            // clear the message
+                            mMessage.setText("");
+                            fetchMessages();
+                        } else {
+                            Log.e(TAG, "Could not send message: " + e.getLocalizedMessage());
+                            showError();
+                        }
+                        mSpinner.setVisibility(View.GONE);
+                        mSend.setVisibility(View.VISIBLE);
                     }
-                }
-            });
+                });
 
-
+            }
         }
     }
 }
