@@ -110,49 +110,7 @@ public class MessagesFragment extends Fragment implements View.OnClickListener{
      * Call whenever you want the most recent list of messages
      */
     private void fetchMessages(){
-        ParseQuery<ParseObject> query = ParseQuery.getQuery("Messages");
-        query.setLimit(100);
-        query.addDescendingOrder("createdAt");
-        query.include("poster");
-        query.findInBackground(new FindCallback<ParseObject>() {
-            public void done(List<ParseObject> parseObjectList, ParseException e) {
-                if (e == null) {
-
-                    // found some messages, print how many
-                    Log.d(TAG, "Retrieved " + parseObjectList.size() + " messages");
-
-                    // create message objects so that we can use them later
-                    //  to make the visible list in the adapter
-                    ArrayList<Message> messages = new ArrayList<Message>();
-                    for(int i = parseObjectList.size()-1; i >= 0; i-- ){
-                        messages.add(new Message(parseObjectList.get(i)));
-                    }
-
-                    // did we get any new messages? if so we should scroll to the bottom
-                    boolean hasNewMessages = mAdapter.areListsDifferent(messages);
-
-                    if(hasNewMessages) {
-                        mAdapter.setMessages(messages);
-                        mRecyclerView.scrollToPosition(messages.size() - 1);
-                        Vibrator v = (Vibrator) getContext().getSystemService(Context.VIBRATOR_SERVICE);
-                        v.vibrate(50);
-                    }
-
-                    // fetch messages again in a couple seconds
-                    Handler handler = new Handler();
-                    handler.postDelayed(new Runnable(){
-                        @Override
-                        public void run(){
-                            fetchMessages();
-                        }
-                    }, 5000);
-
-                } else {
-                    Log.d(TAG, "Error: " + e.getMessage());
-                    showError();
-                }
-            }
-        });
+        
 
     }
 
