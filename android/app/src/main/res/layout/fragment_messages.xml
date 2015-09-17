@@ -26,5 +26,21 @@
     tools:context="com.tamuhack.bootcamp.MessagesFragment">
 
 
+    <TextView
+        android:id="@+id/helloText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_centerInParent="true"
+        android:text="Hello, Bootcampers!"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_send_black_24dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/helloText"
+        android:layout_marginTop="10dp"/>
+
 
 </RelativeLayout>
