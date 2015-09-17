@@ -1,5 +1,5 @@
 # Android Bootcamp
-We built an app to help teach students about Android. A chat client is what we came up with as it is highly interactive and involves some cool web components too!
+Students started with an empty Android project and programmed along with us as they learned the basics to Android and RESTFul web services (powered by Parse). Together we built a chat client because it allowed students to see in real time the product of all their work coming together. Best of all, the whole class was on the same chat thread and had their own Pokemon avatars. This was a great way to introduce students to Android in a fun interactive way.
 
 ![App in action](screenshot.png)
 
