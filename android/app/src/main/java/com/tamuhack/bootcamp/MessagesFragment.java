@@ -58,13 +58,6 @@ public class MessagesFragment extends Fragment implements View.OnClickListener{
 
     private static final String USER_ID = "2oYLPG6AZD";
 
-    private RecyclerView mRecyclerView;
-    private MessagesAdapter mAdapter;
-    private ImageButton mSend;
-    private EditText mMessage;
-    private ProgressBar mSpinner;
-    private TextView mError;
-
     public static MessagesFragment newInstance() {
         MessagesFragment fragment = new MessagesFragment();
         return fragment;
@@ -73,7 +66,7 @@ public class MessagesFragment extends Fragment implements View.OnClickListener{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
+
     }
 
     @Override
@@ -81,20 +74,6 @@ public class MessagesFragment extends Fragment implements View.OnClickListener{
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_messages, container, false);
-
-        mRecyclerView = (RecyclerView)view.findViewById(R.id.messagesList);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mAdapter = new MessagesAdapter(getContext());
-        mRecyclerView.setAdapter(mAdapter);
-
-        mSend = (ImageButton) view.findViewById(R.id.send);
-        mSend.setOnClickListener(this);
-
-        mMessage = (EditText) view.findViewById(R.id.message);
-
-        mSpinner = (ProgressBar) view.findViewById(R.id.spinner);
-
-        mError = (TextView) view.findViewById(R.id.error);
         
         return view;
     }
