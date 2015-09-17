@@ -39,9 +39,6 @@ import java.util.TimeZone;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-/**
- * Created by bob on 9/13/15.
- */
 public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.ViewHolder> {
 
     private WeakReference<Context> mContext;
@@ -87,33 +84,12 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.ViewHo
 
     public class ViewHolder extends RecyclerView.ViewHolder{
 
-        private CircleImageView mImage;
-        private TextView mMessage;
-        private TextView mMeta;
-
         public ViewHolder(View v) {
             super(v);
-
-            mImage = (CircleImageView) v.findViewById(R.id.image);
-            mMessage = (TextView) v.findViewById(R.id.message);
-            mMeta = (TextView) v.findViewById(R.id.meta);
         }
 
         public void setMessage(Message message){
-            mMessage.setText(message.getMessage());
 
-            Calendar c = Calendar.getInstance();
-            c.setTimeZone(TimeZone.getTimeZone("UTC"));
-            CharSequence time = DateUtils.getRelativeTimeSpanString(message.getDate(), c.getTimeInMillis(),
-                    DateUtils.FORMAT_ABBREV_RELATIVE);
-
-            mMeta.setText(message.getUsername() + ", " + time);
-
-            if(!TextUtils.isEmpty(message.getUserProfilePictureUrl())) {
-                if(mContext != null) {
-                    Picasso.with(mContext.get()).load(message.getUserProfilePictureUrl()).into(mImage);
-                }
-            }
         }
     }
 }
