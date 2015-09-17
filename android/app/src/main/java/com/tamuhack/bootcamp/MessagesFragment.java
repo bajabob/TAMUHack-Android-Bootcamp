@@ -183,35 +183,6 @@ public class MessagesFragment extends Fragment implements View.OnClickListener{
     @Override
     public void onClick(View v) {
 
-        // send button has been clicked
-        if(v.getId() == R.id.send){
 
-            String message = mMessage.getText().toString();
-
-            if( !TextUtils.isEmpty(message)) {
-
-                mSpinner.setVisibility(View.VISIBLE);
-                mSend.setVisibility(View.GONE);
-
-                ParseObject po = new ParseObject("Messages");
-                po.put("message", message);
-                po.put("poster", ParseObject.createWithoutData("User", USER_ID));
-                po.saveInBackground(new SaveCallback() {
-                    @Override
-                    public void done(ParseException e) {
-                        if (e == null) {
-                            // clear the message
-                            mMessage.setText("");
-                            fetchMessages();
-                        } else {
-                            Log.e(TAG, "Could not send message: " + e.getLocalizedMessage());
-                            showError();
-                        }
-                        mSpinner.setVisibility(View.GONE);
-                        mSend.setVisibility(View.VISIBLE);
-                    }
-                });
-            }
-        }
     }
 }
