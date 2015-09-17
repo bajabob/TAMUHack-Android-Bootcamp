@@ -2,7 +2,5 @@
     <string name="app_name">Bootcamp</string>
 
     <string name="messages_title">Bootcamp Chat</string>
-    <string name="messages_enter_text_here">Enter Message Here</string>
-    <string name="messages_error">There was an error sending/receiving messages</string>
 
 </resources>

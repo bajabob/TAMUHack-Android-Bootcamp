@@ -20,10 +20,6 @@
   -->
 
 <resources>
-  <color name="maroon">#500000</color>
-  <color name="grey">#999999</color>
-  <color name="lightGrey">#eeeeee</color>
-  <color name="warningMessage">#f65d5d</color>
-  <color name="warningBackground">#ffffff</color>
+
 
 </resources>
