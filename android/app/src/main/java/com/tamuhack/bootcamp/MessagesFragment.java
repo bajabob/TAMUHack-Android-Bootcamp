@@ -25,6 +25,7 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Vibrator;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -48,11 +49,14 @@ import com.parse.SaveCallback;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 
 public class MessagesFragment extends Fragment implements View.OnClickListener{
 
     private static final String TAG = "MessagesFragment";
+
+    private static final String USER_ID = "2oYLPG6AZD";
 
     private RecyclerView mRecyclerView;
     private MessagesAdapter mAdapter;
@@ -85,7 +89,7 @@ public class MessagesFragment extends Fragment implements View.OnClickListener{
 
         View view = inflater.inflate(R.layout.fragment_messages, container, false);
 
-        mRecyclerView = (RecyclerView)view.findViewById(R.id.messages);
+        mRecyclerView = (RecyclerView)view.findViewById(R.id.messagesList);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mAdapter = new MessagesAdapter(getContext());
         mRecyclerView.setAdapter(mAdapter);
@@ -107,7 +111,8 @@ public class MessagesFragment extends Fragment implements View.OnClickListener{
      */
     private void fetchMessages(){
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Messages");
-        query.addAscendingOrder("createdAt");
+        query.setLimit(100);
+        query.addDescendingOrder("createdAt");
         query.include("poster");
         query.findInBackground(new FindCallback<ParseObject>() {
             public void done(List<ParseObject> parseObjectList, ParseException e) {
@@ -119,16 +124,18 @@ public class MessagesFragment extends Fragment implements View.OnClickListener{
                     // create message objects so that we can use them later
                     //  to make the visible list in the adapter
                     ArrayList<Message> messages = new ArrayList<Message>();
-                    for(ParseObject po : parseObjectList){
-                        messages.add(new Message(po));
+                    for(int i = parseObjectList.size()-1; i >= 0; i-- ){
+                        messages.add(new Message(parseObjectList.get(i)));
                     }
 
                     // did we get any new messages? if so we should scroll to the bottom
-                    boolean shouldScroll = (messages.size() != mAdapter.getItemCount());
-                    mAdapter.setMessages(messages);
+                    boolean hasNewMessages = mAdapter.areListsDifferent(messages);
 
-                    if(shouldScroll) {
+                    if(hasNewMessages) {
+                        mAdapter.setMessages(messages);
                         mRecyclerView.scrollToPosition(messages.size() - 1);
+                        Vibrator v = (Vibrator) getContext().getSystemService(Context.VIBRATOR_SERVICE);
+                        v.vibrate(50);
                     }
 
                     // fetch messages again in a couple seconds
@@ -188,7 +195,7 @@ public class MessagesFragment extends Fragment implements View.OnClickListener{
 
                 ParseObject po = new ParseObject("Messages");
                 po.put("message", message);
-                po.put("poster", ParseObject.createWithoutData("User", "D0QU3Il9Zh"));
+                po.put("poster", ParseObject.createWithoutData("User", USER_ID));
                 po.saveInBackground(new SaveCallback() {
                     @Override
                     public void done(ParseException e) {
@@ -204,7 +211,6 @@ public class MessagesFragment extends Fragment implements View.OnClickListener{
                         mSend.setVisibility(View.VISIBLE);
                     }
                 });
-
             }
         }
     }

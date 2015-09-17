@@ -34,6 +34,7 @@ import com.squareup.picasso.Picasso;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Stack;
 import java.util.TimeZone;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -75,6 +76,13 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.ViewHo
     @Override
     public int getItemCount() {
         return mMessages.size();
+    }
+
+    public boolean areListsDifferent(ArrayList<Message> newMessages){
+        if(mMessages.size() == 0){
+            return true;
+        }
+        return newMessages.get(0).hashCode() != mMessages.get(0).hashCode();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{

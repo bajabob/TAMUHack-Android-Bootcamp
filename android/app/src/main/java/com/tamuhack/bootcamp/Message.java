@@ -59,4 +59,9 @@ public class Message {
     public String getUserProfilePictureUrl(){
         return mUserProfileUrl;
     }
+
+    @Override
+    public int hashCode(){
+        return (int)mDate;
+    }
 }
