@@ -73,16 +73,7 @@ public class MessagesFragment extends Fragment implements View.OnClickListener{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // check for an internet connection
-        ConnectivityManager cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-        if((cm.getActiveNetworkInfo() != null)) {
-            this.fetchMessages();
-        }else{
-            showError();
-        }
-
-        showError();
+        
     }
 
     @Override
@@ -116,28 +107,6 @@ public class MessagesFragment extends Fragment implements View.OnClickListener{
 
     }
 
-    public void showError(){
-        Animation slideDown = AnimationUtils.loadAnimation(getContext(), R.anim.slide_in_out_top);
-        slideDown.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                // need to hide the view when the animation is complete
-                mError.setVisibility(View.GONE);
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
-            }
-        });
-        mError.startAnimation(slideDown);
-        mError.setVisibility(View.VISIBLE);
-    }
     
     
     @Override
