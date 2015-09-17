@@ -1,4 +1,6 @@
 # Android Bootcamp
+We built an app to help teach students about Android. A chat client is what we came up with as it is highly interactive and involves some cool web components too!
+
 ![App in action](screenshot.png)
 
 ## Instructors
