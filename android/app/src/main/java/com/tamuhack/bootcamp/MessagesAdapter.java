@@ -82,7 +82,7 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.ViewHo
         if(mMessages.size() == 0){
             return true;
         }
-        return newMessages.get(0).hashCode() != mMessages.get(0).hashCode();
+        return newMessages.size() != mMessages.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
