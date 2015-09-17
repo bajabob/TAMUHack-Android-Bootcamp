@@ -1,0 +1,13 @@
+{ "results": [
+	{
+        "createdAt": "2015-09-17T20:13:38.333Z",
+        "message": "Hello Bootcamp!",
+        "objectId": "tIe25EpmfL",
+        "poster": {
+            "__type": "Pointer",
+            "className": "User",
+            "objectId": "a4HFREROkt"
+        },
+        "updatedAt": "2015-09-17T20:13:46.168Z"
+    }
+] }
