@@ -20,48 +20,11 @@
 
 package com.tamuhack.bootcamp;
 
-import com.parse.ParseObject;
 
 /**
  * Created by bob on 9/13/15.
  */
 public class Message {
 
-    private String mUser;
-    private String mMessage;
-    private String mUserProfileUrl;
-    private long mDate;
 
-
-    public Message(ParseObject po){
-
-        mMessage = po.getString("message");
-        mDate = po.getCreatedAt().getTime();
-
-        ParseObject user = po.getParseObject("poster");
-
-        mUser = user.getString("name");
-        mUserProfileUrl = user.getString("profilePictureUrl");
-    }
-
-    public long getDate(){
-        return mDate;
-    }
-
-    public String getUsername(){
-        return mUser;
-    }
-
-    public String getMessage(){
-        return mMessage;
-    }
-
-    public String getUserProfilePictureUrl(){
-        return mUserProfileUrl;
-    }
-
-    @Override
-    public int hashCode(){
-        return (int)mDate;
-    }
 }

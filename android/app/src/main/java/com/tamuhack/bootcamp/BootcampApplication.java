@@ -22,8 +22,6 @@ package com.tamuhack.bootcamp;
 
 import android.app.Application;
 
-import com.parse.Parse;
-
 
 public class BootcampApplication extends Application{
 
@@ -33,10 +31,6 @@ public class BootcampApplication extends Application{
     @Override
     public void onCreate() {
         super.onCreate();
-
-        Parse.enableLocalDatastore(this);
-
-        Parse.initialize(this, API_PARSE_APP_ID, API_PARSE_APP_KEY);
 
     }
 
