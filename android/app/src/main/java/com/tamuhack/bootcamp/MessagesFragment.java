@@ -81,6 +81,8 @@ public class MessagesFragment extends Fragment implements View.OnClickListener{
         }else{
             showError();
         }
+
+        showError();
     }
 
     @Override
@@ -110,7 +112,7 @@ public class MessagesFragment extends Fragment implements View.OnClickListener{
      * Call whenever you want the most recent list of messages
      */
     private void fetchMessages(){
-        
+
 
     }
 
